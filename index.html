@@ -5,74 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#F8FAFD" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ef4444">
 <title>Karaoke Queue</title>
 <link rel="icon" href="data:,">
 <script>
   // >>> THE ONLY LINE YOU EDIT ON THE NIGHT <<<
-  var TARGET = "https://PASTE-TUNNEL-LINK-HERE";
+  var TARGET = "https://dress-nam-theme-beijing.trycloudflare.com/";
 
-  // Redirect immediately, before the page is even drawn.
-  // replace() keeps this page out of the Back button history.
+  // Runs first, before any styles or fonts, so the redirect starts immediately.
   if (TARGET.indexOf("PASTE-") === -1) location.replace(TARGET);
 </script>
+<!-- Font only loads if the redirect somehow doesn't fire. Montserrat ExtraBold, subset to the letters used. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap&text=Joining%20the%20karaoke%20queueOpen%20tap%20button.">
 <style>
   :root {
-    --surface: #F8FAFD; --card: #FFFFFF; --on-surface: #1F1F1F; --muted: #444746;
-    --primary: #0B57D0; --on-primary: #FFFFFF; --track: #D3E3FD; --outline: #C4C7C5;
+    --surface: #FFFBFA; --on-surface: #1F1A1A; --muted: #534343;
+    --primary: #ef4444; --on-primary: #FFFFFF;
+    --container: #FEE2E2; --accent: #FCA5A5;
+    --display: "Montserrat", "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --body: "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --surface: #131314; --card: #1E1F20; --on-surface: #E3E3E3; --muted: #C4C7C5;
-      --primary: #A8C7FA; --on-primary: #062E6F; --track: #0842A0; --outline: #444746;
+      --surface: #141010; --on-surface: #F1E0DE; --muted: #D8C2BF;
+      --container: #7F1D1D; --accent: #450A0A;
     }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
   body {
-    display: flex; align-items: center; justify-content: center; padding: 16px;
-    background: var(--surface); color: var(--on-surface);
-    font-family: "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
-    -webkit-font-smoothing: antialiased;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    background: var(--surface); color: var(--on-surface); font-family: var(--body);
+    -webkit-font-smoothing: antialiased; overflow: hidden;
   }
-  .card {
-    width: 100%; max-width: 400px; padding: 40px 32px 32px; text-align: center;
-    background: var(--card); border: 1px solid var(--outline); border-radius: 28px;
-  }
-  .icon { font-size: 40px; line-height: 1; margin-bottom: 16px; }
-  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 400; line-height: 32px; }
-  p  { margin: 0 0 24px; font-size: 14px; line-height: 20px; color: var(--muted); letter-spacing: .25px; }
+  .wrap { width: 100%; max-width: 420px; text-align: center; }
 
-  /* Indeterminate progress bar */
-  .bar { height: 4px; border-radius: 2px; background: var(--track); overflow: hidden; margin-bottom: 24px; }
-  .bar::before {
-    content: ""; display: block; height: 100%; width: 40%; border-radius: 2px;
-    background: var(--primary); animation: slide 1.2s ease-in-out infinite;
+  .shape-box { position: relative; width: 120px; height: 120px; margin: 0 auto 40px; }
+  .shape {
+    position: absolute; inset: 0; background: var(--container);
+    animation: morph 3.2s cubic-bezier(.34, 1.56, .64, 1) infinite;
   }
-  @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
-  @media (prefers-reduced-motion: reduce) { .bar::before { animation: none; width: 100%; } }
+  .shape.back {
+    inset: 14px; background: var(--accent);
+    animation: morph 3.2s cubic-bezier(.34, 1.56, .64, 1) infinite reverse;
+  }
+  .emoji {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 44px; line-height: 1;
+  }
+  @keyframes morph {
+    0%   { border-radius: 50%; transform: rotate(0deg); }
+    25%  { border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%; transform: rotate(90deg); }
+    50%  { border-radius: 28px; transform: rotate(180deg); }
+    75%  { border-radius: 62% 38% 37% 63% / 59% 56% 44% 41%; transform: rotate(270deg); }
+    100% { border-radius: 50%; transform: rotate(360deg); }
+  }
 
-  /* Filled button (fallback if the automatic redirect is blocked) */
+  h1 {
+    margin: 0 0 16px; font-family: var(--display); font-weight: 800;
+    font-size: clamp(34px, 10vw, 44px); line-height: 1.1; letter-spacing: -.02em;
+  }
+  p { margin: 0 0 36px; font-size: 16px; line-height: 24px; color: var(--muted); }
+
+  /* Static pill button: no shape change, no transition */
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
-    height: 40px; padding: 0 24px; border-radius: 20px; text-decoration: none;
+    height: 56px; padding: 0 36px; border-radius: 28px; text-decoration: none;
     background: var(--primary); color: var(--on-primary);
-    font-size: 14px; font-weight: 500; letter-spacing: .1px;
+    font-family: var(--display); font-weight: 800; font-size: 16px;
   }
   .btn:active { opacity: .85; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shape, .shape.back { animation: none; border-radius: 50%; }
+  }
 </style>
 </head>
 <body>
-  <main class="card">
-    <div class="icon" aria-hidden="true">🎤</div>
+  <main class="wrap">
+    <div class="shape-box" aria-hidden="true">
+      <div class="shape"></div>
+      <div class="shape back"></div>
+      <div class="emoji">🎤</div>
+    </div>
     <h1>Joining the karaoke queue</h1>
     <p>Taking you there now. If nothing happens, tap the button.</p>
-    <div class="bar" role="progressbar" aria-label="Loading"></div>
     <a class="btn" id="go" href="#">Open queue</a>
   </main>
-  <script>
-    document.getElementById("go").href = TARGET;
-  </script>
+  <script>document.getElementById("go").href = TARGET;</script>
 </body>
 </html>
