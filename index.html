@@ -1,6 +1,78 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F8FAFD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
 <title>Karaoke Queue</title>
-<meta http-equiv="refresh" content="0; url=https://dress-nam-theme-beijing.trycloudflare.com">
-<a href="https://dress-nam-theme-beijing.trycloudflare.com">Tap here to join the karaoke queue</a>
+<link rel="icon" href="data:,">
+<script>
+  // >>> THE ONLY LINE YOU EDIT ON THE NIGHT <<<
+  var TARGET = "https://PASTE-TUNNEL-LINK-HERE";
+
+  // Redirect immediately, before the page is even drawn.
+  // replace() keeps this page out of the Back button history.
+  if (TARGET.indexOf("PASTE-") === -1) location.replace(TARGET);
+</script>
+<style>
+  :root {
+    --surface: #F8FAFD; --card: #FFFFFF; --on-surface: #1F1F1F; --muted: #444746;
+    --primary: #0B57D0; --on-primary: #FFFFFF; --track: #D3E3FD; --outline: #C4C7C5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #131314; --card: #1E1F20; --on-surface: #E3E3E3; --muted: #C4C7C5;
+      --primary: #A8C7FA; --on-primary: #062E6F; --track: #0842A0; --outline: #444746;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: var(--surface); color: var(--on-surface);
+    font-family: "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    width: 100%; max-width: 400px; padding: 40px 32px 32px; text-align: center;
+    background: var(--card); border: 1px solid var(--outline); border-radius: 28px;
+  }
+  .icon { font-size: 40px; line-height: 1; margin-bottom: 16px; }
+  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 400; line-height: 32px; }
+  p  { margin: 0 0 24px; font-size: 14px; line-height: 20px; color: var(--muted); letter-spacing: .25px; }
+
+  /* Indeterminate progress bar */
+  .bar { height: 4px; border-radius: 2px; background: var(--track); overflow: hidden; margin-bottom: 24px; }
+  .bar::before {
+    content: ""; display: block; height: 100%; width: 40%; border-radius: 2px;
+    background: var(--primary); animation: slide 1.2s ease-in-out infinite;
+  }
+  @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+  @media (prefers-reduced-motion: reduce) { .bar::before { animation: none; width: 100%; } }
+
+  /* Filled button (fallback if the automatic redirect is blocked) */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 40px; padding: 0 24px; border-radius: 20px; text-decoration: none;
+    background: var(--primary); color: var(--on-primary);
+    font-size: 14px; font-weight: 500; letter-spacing: .1px;
+  }
+  .btn:active { opacity: .85; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="icon" aria-hidden="true">🎤</div>
+    <h1>Joining the karaoke queue</h1>
+    <p>Taking you there now. If nothing happens, tap the button.</p>
+    <div class="bar" role="progressbar" aria-label="Loading"></div>
+    <a class="btn" id="go" href="#">Open queue</a>
+  </main>
+  <script>
+    document.getElementById("go").href = TARGET;
+  </script>
+</body>
+</html>
