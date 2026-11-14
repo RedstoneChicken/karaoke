@@ -12,23 +12,27 @@
   // >>> THE ONLY LINE YOU EDIT ON THE NIGHT <<<
   var TARGET = "https://dress-nam-theme-beijing.trycloudflare.com/";
 
-  // Runs first, before any styles or fonts, so the redirect starts immediately.
-  if (TARGET.indexOf("PASTE-") === -1) location.replace(TARGET);
+  // How long the loading screen shows before redirecting, in milliseconds (0 = instant).
+  var DELAY = 1200;
+
+  if (TARGET.indexOf("PASTE-") === -1) {
+    setTimeout(function () { location.replace(TARGET); }, DELAY);
+  }
 </script>
-<!-- Font only loads if the redirect somehow doesn't fire. Montserrat ExtraBold, subset to the letters used. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap&text=Joining%20the%20karaoke%20queueOpen%20tap%20button.">
+<!-- Montserrat ExtraBold, subset to just the heading letters -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap&text=Loading%20the%20queue">
 <style>
   :root {
     --surface: #FFFBFA; --on-surface: #1F1A1A; --muted: #534343;
-    --primary: #ef4444; --on-primary: #FFFFFF;
-    --container: #FEE2E2; --accent: #FCA5A5;
+    --primary: #ef4444;
+    --container: #FEE2E2; --accent: #FCA5A5; --track: #FECACA;
     --display: "Montserrat", "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
     --body: "Google Sans", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --surface: #141010; --on-surface: #F1E0DE; --muted: #D8C2BF;
-      --container: #7F1D1D; --accent: #450A0A;
+      --container: #7F1D1D; --accent: #450A0A; --track: #3B1212;
     }
   }
   * { box-sizing: border-box; }
@@ -40,6 +44,7 @@
   }
   .wrap { width: 100%; max-width: 420px; text-align: center; }
 
+  /* Material 3 Expressive style loading indicator: morphing shapes */
   .shape-box { position: relative; width: 120px; height: 120px; margin: 0 auto 40px; }
   .shape {
     position: absolute; inset: 0; background: var(--container);
@@ -62,22 +67,33 @@
   }
 
   h1 {
-    margin: 0 0 16px; font-family: var(--display); font-weight: 800;
+    margin: 0 0 12px; font-family: var(--display); font-weight: 800;
     font-size: clamp(34px, 10vw, 44px); line-height: 1.1; letter-spacing: -.02em;
   }
-  p { margin: 0 0 36px; font-size: 16px; line-height: 24px; color: var(--muted); }
+  p { margin: 0 0 32px; font-size: 16px; line-height: 24px; color: var(--muted); }
 
-  /* Static pill button: no shape change, no transition */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    height: 56px; padding: 0 36px; border-radius: 28px; text-decoration: none;
-    background: var(--primary); color: var(--on-primary);
-    font-family: var(--display); font-weight: 800; font-size: 16px;
+  /* Material 3 indeterminate linear progress */
+  .bar {
+    width: 160px; height: 4px; margin: 0 auto; border-radius: 2px;
+    background: var(--track); overflow: hidden;
   }
-  .btn:active { opacity: .85; }
+  .bar::before {
+    content: ""; display: block; height: 100%; width: 45%; border-radius: 2px;
+    background: var(--primary); animation: slide 1.1s ease-in-out infinite;
+  }
+  @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+
+  /* Backup link: stays invisible unless the redirect hasn't happened after 5 seconds */
+  .backup {
+    display: inline-block; margin-top: 32px; padding: 10px 16px; border-radius: 20px;
+    color: var(--primary); font-size: 14px; font-weight: 500; text-decoration: none;
+    opacity: 0; pointer-events: none; animation: appear .3s ease 5s forwards;
+  }
+  @keyframes appear { to { opacity: 1; pointer-events: auto; } }
 
   @media (prefers-reduced-motion: reduce) {
     .shape, .shape.back { animation: none; border-radius: 50%; }
+    .bar::before { animation: none; width: 100%; }
   }
 </style>
 </head>
@@ -88,9 +104,10 @@
       <div class="shape back"></div>
       <div class="emoji">🎤</div>
     </div>
-    <h1>Joining the karaoke queue</h1>
-    <p>Taking you there now. If nothing happens, tap the button.</p>
-    <a class="btn" id="go" href="#">Open queue</a>
+    <h1>Loading the queue</h1>
+    <p>Hang tight, getting you in…</p>
+    <div class="bar" role="progressbar" aria-label="Loading the karaoke queue"></div>
+    <a class="backup" id="go" href="#">Still here? Tap to open the queue</a>
   </main>
   <script>document.getElementById("go").href = TARGET;</script>
 </body>
