@@ -22,11 +22,20 @@
   }
 
   if (TARGET.indexOf("PASTE-") === -1) {
-    setTimeout(go, DELAY);
+    var started = false;
+    function start() {
+      if (started) return;
+      started = true;
+      setTimeout(go, DELAY);
+    }
+    // Wait until the loading screen has really been drawn, then start the countdown
+    requestAnimationFrame(function () { requestAnimationFrame(start); });
+    // Safety net in case the browser never paints (e.g. page opened in the background)
+    setTimeout(start, 2500);
   }
 </script>
 <!-- Montserrat ExtraBold, subset to just the heading letters -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap&text=Loading%20the%20queue">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap&text=Loading%20the%20queue" media="print" onload="this.media='all'">
 <style>
   :root {
     --surface: #FFFBFA; --on-surface: #1F1A1A; --muted: #534343;
