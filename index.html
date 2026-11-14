@@ -15,8 +15,14 @@
   // How long the loading screen shows before redirecting, in milliseconds (0 = instant).
   var DELAY = 1200;
 
+  function go() {
+    try { location.replace(TARGET); } catch (e) {}
+    // Backup for stricter mobile/in-app browsers: try again a moment later
+    setTimeout(function () { location.href = TARGET; }, 600);
+  }
+
   if (TARGET.indexOf("PASTE-") === -1) {
-    setTimeout(function () { location.replace(TARGET); }, DELAY);
+    setTimeout(go, DELAY);
   }
 </script>
 <!-- Montserrat ExtraBold, subset to just the heading letters -->
@@ -36,26 +42,27 @@
     }
   }
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  html, body { margin: 0; min-height: 100%; }
   body {
     display: flex; align-items: center; justify-content: center; padding: 24px;
     background: var(--surface); color: var(--on-surface); font-family: var(--body);
-    -webkit-font-smoothing: antialiased; overflow: hidden;
+    -webkit-font-smoothing: antialiased; min-height: 100vh; min-height: 100dvh;
   }
   .wrap { width: 100%; max-width: 420px; text-align: center; }
 
   /* Material 3 Expressive style loading indicator: morphing shapes */
   .shape-box { position: relative; width: 120px; height: 120px; margin: 0 auto 40px; }
   .shape {
-    position: absolute; inset: 0; background: var(--container);
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: var(--container);
     animation: morph 3.2s cubic-bezier(.34, 1.56, .64, 1) infinite;
   }
   .shape.back {
-    inset: 14px; background: var(--accent);
+    top: 14px; right: 14px; bottom: 14px; left: 14px; background: var(--accent);
     animation: morph 3.2s cubic-bezier(.34, 1.56, .64, 1) infinite reverse;
   }
   .emoji {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center;
     font-size: 44px; line-height: 1;
   }
   @keyframes morph {
@@ -68,7 +75,7 @@
 
   h1 {
     margin: 0 0 12px; font-family: var(--display); font-weight: 800;
-    font-size: clamp(34px, 10vw, 44px); line-height: 1.1; letter-spacing: -.02em;
+    font-size: 36px; font-size: clamp(34px, 10vw, 44px); line-height: 1.1; letter-spacing: -.02em;
   }
   p { margin: 0 0 32px; font-size: 16px; line-height: 24px; color: var(--muted); }
 
